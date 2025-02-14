@@ -5,9 +5,18 @@ import time
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
+# Some pokemon only spawn at certain times of day, thats what
+# this is for. If set to true, after entering a time, the
+# program will tell you what time of day it would be in game.
+# Unfortunately, I only ever needed this for pokemon platinum
+# so the time of day cycle in this program is based off of that.
+# So if you're not playing platinum then this feature might not
+# work right :P
+do_time_of_day = False
+
 while True:
     clear_screen()
-    times = input()
+    times = input("Paste time from PokeFinder: ")
 
     times = times.split("-")
 
@@ -29,17 +38,20 @@ while True:
     else:
         time_of_day = "A" # typing A and AM both give you AM
 
-    if int(hours) >= 10 and int(hours) < 20:
-        plat_time = "Day"
-    elif int(hours) >= 4 and int(hours) < 10:
-        plat_time = "Morning"
-    else:
-        plat_time = "Night"
-    print(f"Time is: {plat_time}\nc to cancel")
+    if do_time_of_day:
+        if int(hours) >= 10 and int(hours) < 20:
+            plat_time = "Day"
+        elif int(hours) >= 4 and int(hours) < 10:
+            plat_time = "Morning"
+        else:
+            plat_time = "Night"
+        print(f"Time is: {plat_time}")
+
+    print("[c] to cancel, [enter] to proceed")
 
     choice = input()
     if choice.lower() != "c":
-        print("Split\nFocus the month in RunAsDate")
+        print("Focus the month in RunAsDate")
 
         for i in range(3,0,-1):
             print(i)
@@ -51,15 +63,6 @@ while True:
         pyautogui.press('right')
         pyautogui.typewrite(year)
         pyautogui.press('tab')
-
-        move_left = False
-        if move_left:
-            pyautogui.press('left')
-            time.sleep(0.1)
-            pyautogui.press('left')
-            time.sleep(0.1)
-            pyautogui.press('left')
-            time.sleep(0.1)
         
         pyautogui.typewrite(hours)
         pyautogui.press('right')
@@ -71,7 +74,16 @@ while True:
         pyautogui.press('right')
         #time.sleep(1)
         pyautogui.typewrite(time_of_day)
+
+        pyautogui.press('left')
+        time.sleep(0.1)
+        pyautogui.press('left')
+        time.sleep(0.1)
+        pyautogui.press('left')
+        time.sleep(0.1)
+
         pyautogui.press('tab')
 
         print("Done")
+        print("press [enter] to enter another time")
         input()
